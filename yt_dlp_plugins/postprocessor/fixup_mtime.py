@@ -19,7 +19,9 @@ class FixupMtimePP(PostProcessor):
         self._mtime_key = mtime_key
         self._mtime_format = re.sub(r'%%', '%', mtime_format)
 
-    def _strptime_or_none(self, timestamp: Union[float, int, str], format_code: str) -> Optional[datetime.datetime]:
+    def _strptime_or_none(self, timestamp: Union[float, int, str, None], format_code: str) -> Optional[datetime.datetime]:
+        if timestamp is None:
+            return None
         if isinstance(timestamp, (float, int)):
             return datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc)
         for code in [format_code] + date_formats(day_first=True):

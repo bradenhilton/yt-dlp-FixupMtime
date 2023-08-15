@@ -33,6 +33,12 @@ class TestFixupMtimePP(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
 
+    def test__striptime_or_none_with_none_timestamp(self):
+        timestamp = None
+        format_code = self.pp._mtime_format
+        expected = None
+        self.assertEqual(self.pp._strptime_or_none(timestamp, format_code), expected)
+
     def test__strptime_or_none_with_invalid_timestamp(self):
         timestamp = 'foobar'
         format_code = self.pp._mtime_format
