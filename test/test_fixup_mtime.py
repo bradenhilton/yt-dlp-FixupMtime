@@ -33,7 +33,7 @@ class TestFixupMtimePP(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
 
-    def test__striptime_or_none_with_none_timestamp(self):
+    def test__strptime_or_none_with_none_timestamp(self):
         timestamp = None
         format_code = self.pp._mtime_format
         expected = None
