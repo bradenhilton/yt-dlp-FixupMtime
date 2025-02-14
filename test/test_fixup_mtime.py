@@ -16,18 +16,22 @@ from yt_dlp_plugins.postprocessor.fixup_mtime import FixupMtimePP
 class TestFixupMtimePP(unittest.TestCase):
     def setUp(self):
         self.pp = FixupMtimePP()
+        self.info = {"filepath": "test äةُ한汉漢なナอัй.mp4", "upload_date": "20120101"}
 
         # Create a temporary directory of files, set their initial mtime
+        file_path = Path(self.info["filepath"])
         self.temp_dir = tempfile.mkdtemp()
         self.files = [
-            Path(self.temp_dir, filename) for filename in ["test.mp4", "test.jpg", "test.info.json", "test2.mp4"]
+            file_path,
+            file_path.with_suffix(""),
+            file_path.with_suffix(".jpg"),
+            file_path.with_suffix(".info.json"),
+            Path("test2.mp4"),
         ]
         self.initial_mtime = 1234567890.0
         for path in self.files:
             path.touch()
             os.utime(path, (self.initial_mtime, self.initial_mtime))
-
-        self.info = {"filepath": self.files[0], "upload_date": "20120101"}
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -70,7 +74,7 @@ class TestFixupMtimePP(unittest.TestCase):
 
     def test__get_related_files(self):
         filepath = self.info.get("filepath")
-        expected = [path for path in self.files if path.name in ["test.mp4", "test.jpg", "test.info.json"]]
+        expected = list(filter(lambda fpath: not fpath.name.startswith("test2"), self.files))
         self.assertCountEqual(self.pp._get_related_files(filepath), expected)  # noqa: PT009
 
     def test__get_mtime_with_existing_mtime(self):
@@ -102,9 +106,10 @@ class TestFixupMtimePP(unittest.TestCase):
         self.pp._mtime_format = "%Y%m%d"
         expected = datetime(year=2012, month=1, day=1, tzinfo=timezone.utc).timestamp()
         self.pp.run(self.info)
-        for path in self.files[:3]:
-            assert os.path.getmtime(path) == expected
-        assert os.path.getmtime(self.files[3]) != expected
+        for file in list(filter(lambda fpath: not fpath.name.startswith("test2"), self.files)):
+            assert file.stat().st_mtime == expected
+        for file in list(filter(lambda fpath: fpath.name.startswith("test2"), self.files)):
+            assert file.stat().st_mtime != expected
 
 
 if __name__ == "__main__":
