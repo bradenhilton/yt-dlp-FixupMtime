@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - uses: astral-sh/ruff-action@f14634c415d3e63ffd4d550a22f037df4c734a60
+      - uses: astral-sh/ruff-action@a7b1296fb5bd3ebb270731d1782bf05a97806e29
         with:
           version-file: pyproject.toml
 
