@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+
 from yt_dlp.postprocessor.common import PostProcessor
 from yt_dlp.utils import date_formats
 
@@ -34,7 +35,16 @@ class FixupMtimePP(PostProcessor):
     def _get_related_files(self, filepath: Path | str) -> list[Path]:
         if isinstance(filepath, str):
             filepath = Path(filepath)
-        return [Path(path) for path in filepath.parent.glob(f"{glob.escape(filepath.stem)}.*") if path.is_file()]
+        directory = filepath.parent
+        base_name = glob.escape(filepath.stem)
+        files_with_extension = directory.glob(f"{base_name}.*")
+        files = [fpath for fpath in files_with_extension if fpath.is_file()]
+        file_no_extension = directory / base_name
+        if file_no_extension.exists() and file_no_extension.is_file():
+            files.append(file_no_extension)
+        if filepath not in files:
+            files.insert(0, filepath)
+        return files
 
     def _get_mtime(self, filepath: Path, info: dict, mtime_key: str) -> float | int | str | None:
         return os.path.getmtime(filepath) if mtime_key == "mtime" else info.get(mtime_key)

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "yt-dlp-fixupmtime"
-version = "1.1.1"
+version = "1.1.2"
 description = "A yt-dlp postprocessor plugin to set the mtime of all files to a given datetime value by key"
 requires-python = ">=3.9"
 license = { file = "LICENSE" }
