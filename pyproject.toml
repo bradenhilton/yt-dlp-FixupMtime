@@ -1,6 +1,44 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.distutils.bdist_wheel]
-universal = true
+[project]
+name = "yt-dlp-fixupmtime"
+version = "1.1.1"
+description = "A yt-dlp postprocessor plugin to set the mtime of all files to a given datetime value by key"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+readme = "README.md"
+keywords = ["yt-dlp", "yt-dlp-plugins", "mtime", "upload-date", "date-modified"]
+authors = [{ name = "bradenhilton" }]
+classifiers = [
+    "Private :: Do Not Upload",
+
+    "Environment :: Console",
+    "Environment :: Plugins",
+
+    "Intended Audience :: End Users/Desktop",
+
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
+
+    "Operating System :: OS Independent",
+
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+
+    "Topic :: Multimedia :: Video",
+]
+dependencies = ["yt-dlp>=2023.01.02"]
+
+[dependency-groups]
+dev = ["pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.0.17"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["yt_dlp_plugins"]
+
+[tool.ruff]
+extend = "ruff.toml"
