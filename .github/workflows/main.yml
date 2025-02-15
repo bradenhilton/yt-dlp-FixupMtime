@@ -30,6 +30,7 @@ jobs:
             core:
               - added|modified: 'yt_dlp_plugins/**/*.py'
               - added|modified: 'test/**/*.py'
+              - added|modified: 'uv.lock'
             workflow:
               - added|modified: '.github/workflows/main.yml'
 
