@@ -1,3 +1,8 @@
-__pycache__
 *.egg-info/
 *.pyc
+*cache*
+
+*coverage*
+
+uv.lock
+test_files/

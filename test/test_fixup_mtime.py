@@ -2,10 +2,10 @@
 import os
 import shutil
 import sys
-import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -16,25 +16,27 @@ from yt_dlp_plugins.postprocessor.fixup_mtime import FixupMtimePP
 class TestFixupMtimePP(unittest.TestCase):
     def setUp(self):
         self.pp = FixupMtimePP()
-        self.info = {"filepath": "test äةُ한汉漢なナอัй.mp4", "upload_date": "20120101"}
+        self.root_dir = Path(__file__).resolve().parent.parent
+        self.test_files_dir = self.root_dir.joinpath("test_files")
 
         # Create a temporary directory of files, set their initial mtime
-        file_path = Path(self.info["filepath"])
-        self.temp_dir = tempfile.mkdtemp()
+        file_path = self.test_files_dir.joinpath("test äةُ한汉漢なナอัй.mp4").relative_to(self.root_dir)
+        self.info = {"filepath": str(file_path), "upload_date": "20120101"}
         self.files = [
             file_path,
             file_path.with_suffix(""),
             file_path.with_suffix(".jpg"),
             file_path.with_suffix(".info.json"),
-            Path("test2.mp4"),
+            self.test_files_dir.joinpath("test2.mp4"),
         ]
         self.initial_mtime = 1234567890.0
+        self.test_files_dir.mkdir(parents=True, exist_ok=True)
         for path in self.files:
             path.touch()
             os.utime(path, (self.initial_mtime, self.initial_mtime))
 
     def tearDown(self):
-        shutil.rmtree(self.temp_dir)
+        shutil.rmtree(self.test_files_dir)
 
     def test__strptime_or_none_with_none_timestamp(self):
         timestamp = None
@@ -110,6 +112,12 @@ class TestFixupMtimePP(unittest.TestCase):
             assert file.stat().st_mtime == expected
         for file in list(filter(lambda fpath: fpath.name.startswith("test2"), self.files)):
             assert file.stat().st_mtime != expected
+
+    def test_run_with_invalid_mtime_key(self):
+        self.pp._mtime_key = "invalid"
+        with patch.object(self.pp, "to_screen") as mock_to_screen:
+            self.pp.run(self.info)
+            mock_to_screen.assert_called_with(f"Unable to set mtime to `{self.pp._mtime_key}`")
 
 
 if __name__ == "__main__":
