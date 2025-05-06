@@ -42,3 +42,6 @@ packages = ["yt_dlp_plugins"]
 
 [tool.ruff]
 extend = "ruff.toml"
+
+[tool.coverage.report]
+exclude_also = ["if TYPE_CHECKING:", "unittest.main()"]

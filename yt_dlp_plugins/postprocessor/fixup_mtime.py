@@ -42,8 +42,6 @@ class FixupMtimePP(PostProcessor):
         file_no_extension = directory / base_name
         if file_no_extension.exists() and file_no_extension.is_file():
             files.append(file_no_extension)
-        if filepath not in files:
-            files.insert(0, filepath)
         return files
 
     def _get_mtime(self, filepath: Path, info: dict, mtime_key: str) -> float | int | str | None:
