@@ -56,7 +56,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: astral-sh/ruff-action@eaf0ecdd668ceea36159ff9d91882c9795d89b49
+      - uses: astral-sh/ruff-action@0c50076f12c38c3d0115b7b519b54a91cb9cf0ad
         with:
           version-file: pyproject.toml
 
@@ -82,7 +82,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+      - uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc
         with:
           enable-cache: true
           cache-suffix: ${{ matrix.python-version }}
@@ -114,7 +114,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+      - uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc
         with:
           enable-cache: true
           cache-suffix: ${{ matrix.python-version }}
