@@ -78,11 +78,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
         with:
           enable-cache: true
           cache-suffix: ${{ matrix.python-version }}
@@ -110,11 +110,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2
         with:
           enable-cache: true
           cache-suffix: ${{ matrix.python-version }}
